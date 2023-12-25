@@ -5,7 +5,6 @@ import os
 import urllib
 import tempfile
 import shutil
-import cv2
 import json
 from PIL import Image
 from io import BytesIO
@@ -105,37 +104,28 @@ def upload_video(video_path):
     frame_directory = "frames"
     if not os.path.exists(frame_directory):
         os.makedirs(frame_directory)
+
     # 打开视频文件
-    cap = cv2.VideoCapture(video_path)
-    # 获取视频的帧率
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    # 设置每秒取两帧
+    reader = imageio.get_reader(video_path, format='FFMPEG')
+    fps = reader.get_meta_data()['fps']
     frame_interval = int(fps / 2)
-    # 读取视频帧
+
     count = 0
-    results = []  # 修正这一行
-    while True:
-        ret, frame = cap.read()
-        # 检查是否成功读取帧
-        if not ret:
-            break
-        # 只处理每秒的两帧
+    results = []
+
+    for frame in reader:
         if count % frame_interval == 0:
-            # 保存帧到本地
             frame_path = os.path.join(frame_directory, f"frame{count:03d}.jpg")
-            cv2.imwrite(frame_path, frame)
-            # 对每一帧进行图像检测
+            imageio.imwrite(frame_path, frame)
             frame_result = upload_image(frame_path)
             results.append(frame_result)
         count += 1
-    # 进一步处理检测结果，根据业务逻辑判断是否违规
 
-    # 关闭视频文件
-    cap.release()
+    reader.close()
 
-    # 删除临时文件夹
-    cv2.destroyAllWindows()
-    shutil.rmtree(frame_directory)  # 修改这一行
+    # 根据业务逻辑进一步处理检测结果
+
+    shutil.rmtree(frame_directory)
     return results
 
 
