@@ -106,7 +106,7 @@ def upload_video(video_path):
         os.makedirs(frame_directory)
 
     # 打开视频文件
-    reader = imageio.get_reader(video_path, format='FFMPEG')
+    reader = imageio.get_reader(video_path)
     fps = reader.get_meta_data()['fps']
     frame_interval = int(fps / 2)
 
