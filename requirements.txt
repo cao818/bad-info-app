@@ -7,3 +7,5 @@ Pillow
 numpy
 requests
 imageio
+imageio_ffmpeg
+imageio_pyav
