@@ -108,7 +108,9 @@ def upload_video(video_path):
 
     # 打开视频文件
     reader = imageio.get_reader(video_path)
-    fps = reader.get_meta_data()['fps']
+    metadata = reader.get_meta_data()
+    default_fps_value = 30  # 你可以根据需要选择一个合适的默认帧率值
+    fps = metadata.get('fps', default_fps_value)
     frame_interval = int(fps / 2)
 
     count = 0
