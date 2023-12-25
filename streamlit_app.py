@@ -9,7 +9,6 @@ import json
 from PIL import Image
 from io import BytesIO
 import imageio
-import imageio_ffmpeg as ffmpeg
 import numpy as np
 
 API_KEY1 = "U9G6xp4v74uIP48rcsZQitAY"
