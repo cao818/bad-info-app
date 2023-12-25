@@ -8,3 +8,4 @@ numpy
 requests
 imageio
 imageio[ffmpeg]
+imageio[pyav]
